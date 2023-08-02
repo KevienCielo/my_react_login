@@ -141,5 +141,9 @@ app.get("/books/:bookId", verify, (req, res) => {
   }
 });
 
+app.get("/users", verify, (req, res) => {
+  res.json(LoginProfiles);
+});
+
 app.listen(5000);
 console.log("server is running in port 5000");
