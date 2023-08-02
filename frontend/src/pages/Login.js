@@ -1,13 +1,19 @@
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { useState } from "react";
 import apiRequest from "../datafetch/apiRequest";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [variant, setVariant] = useState("");
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const objReq = {
@@ -21,24 +27,33 @@ const Login = () => {
     const okresult = await result.json();
 
     if (okresult.Code === "200") {
+      setVariant("success");
       setSuccessMsg(okresult.Msg);
       console.log(
-        `username(from backend): ${okresult.username}\n password(from backend): ${okresult.password}\n access token: ${okresult.accessToken}`
+        `username(from backend): ${okresult.username}\n isAdmin(from backend): ${okresult.isAdmin}\n access token: ${okresult.accessToken}`
       );
+      localStorage.setItem("accessToken", okresult.accessToken);
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 3000);
     } else {
+      setVariant("danger");
       setSuccessMsg(okresult.Msg);
     }
   };
 
   return (
     <article className="Login col">
-      <h1 className="mt-5 text-center">This is Login page</h1>
       <hr />
       <section>
         <Form className=" w-25 m-auto" onSubmit={handleSubmit}>
           <legend className="text-center">Login</legend>
           <Row className="mb-3">
-            <b>{successMsg}</b>
+            <Alert key={variant} variant={variant}>
+              {successMsg}
+            </Alert>
+
             <FloatingLabel
               controlId="Username"
               label="Username"
