@@ -1,7 +1,9 @@
-const Main = ({ cdata }) => {
+import { Outlet } from "react-router-dom";
+
+const Main = () => {
   return (
     <main className="container">
-      <section className="row">{cdata}</section>
+      <Outlet></Outlet>
     </main>
   );
 };
