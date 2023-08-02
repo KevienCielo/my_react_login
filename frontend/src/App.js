@@ -4,19 +4,21 @@ import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
 import ContactPage from "./pages/Contact";
 import BlogPage from "./pages/Blog";
-import RouteLayout from "./layouts/RootLayout";
+import RootLayout from "./layouts/RootLayout";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <RouteLayout>
-      <Routes>
+    <Routes>
+      <Route element={<RootLayout />}>
         <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="/home" element={<HomePage></HomePage>}></Route>
         <Route path="/about" element={<AboutPage></AboutPage>}></Route>
         <Route path="/contact" element={<ContactPage></ContactPage>}></Route>
         <Route path="/blog" element={<BlogPage></BlogPage>}></Route>
-      </Routes>
-    </RouteLayout>
+        <Route path="/login" element={<Login />}></Route>
+      </Route>
+    </Routes>
   );
 }
 

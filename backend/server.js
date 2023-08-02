@@ -1,8 +1,14 @@
 const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
 
 const Books = [
   {
@@ -108,12 +114,14 @@ app.post("/login", (req, res) => {
   if (user) {
     const accessToken = generateAccessToken(user);
     res.json({
+      Code: "200",
+      Msg: "Login Successful",
       username: user.username,
       isAdmin: user.isAdmin,
       accessToken: accessToken,
     });
   } else {
-    res.status(400).json("Username or Password incorrect");
+    res.json({ Code: "400", Msg: "Username or Password incorrect" });
   }
 });
 
