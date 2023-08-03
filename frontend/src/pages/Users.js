@@ -4,6 +4,7 @@ import apiRequest from "../datafetch/apiRequest";
 
 const Users = () => {
   const [users, setUsers] = useState("");
+
   const fetchUsers = async (objReq) => {
     const response = await apiRequest("http://localhost:5000/users", objReq);
     const userlist = await response.json();
