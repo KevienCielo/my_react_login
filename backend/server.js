@@ -141,6 +141,17 @@ app.get("/books/:bookId", verify, (req, res) => {
   }
 });
 
+//endpoint for receiving a BookName of a book and returning its details
+app.post("/books/search", verify, (req, res) => {
+  const book = Books.find((u) => {
+    return u.BookName === req.body.BookName;
+  });
+
+  if (book) {
+    "http://localhost:5000/books/search", res.json(book);
+  }
+});
+
 app.get("/users", verify, (req, res) => {
   res.json(LoginProfiles);
 });
