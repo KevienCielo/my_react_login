@@ -6,7 +6,7 @@ const Footer = () => {
       <Navbar fixed="bottom" bg="dark" data-bs-theme="dark">
         <Container>
           <Navbar.Brand className="m-auto text-muted" href="/">
-            &copy; Copyright. Mark Kevien Cielo
+            &copy; Copyright. Mark Cielo
           </Navbar.Brand>
         </Container>
       </Navbar>

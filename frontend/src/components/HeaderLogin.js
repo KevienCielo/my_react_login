@@ -7,7 +7,7 @@ const HeaderLogin = () => {
     <header>
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Nav className="me-auto text-center">
+          <Nav className="m-auto">
             <h1 className="mt-5 text-center text-light ">This is Login page</h1>
           </Nav>
         </Container>
