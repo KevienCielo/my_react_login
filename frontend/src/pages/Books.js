@@ -5,10 +5,8 @@ import apiRequest from "../datafetch/apiRequest";
 const Books = () => {
   const [books, setBooks] = useState("");
   const fetchBooks = async (objReq) => {
-    console.log(objReq);
     const response = await apiRequest("http://localhost:5000/books", objReq);
     const booklist = await response.json();
-    console.log(booklist);
     setBooks(booklist);
   };
 

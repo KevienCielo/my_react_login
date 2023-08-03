@@ -1,5 +1,5 @@
-import Header from "./HeaderLogin";
-import Main from "./Main";
+import Header from "../components/HeaderLogin";
+import Main from "../components/Main";
 const LoginLayout = () => {
   return (
     <div className="root-main">

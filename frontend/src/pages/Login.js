@@ -7,12 +7,13 @@ import { useState } from "react";
 import apiRequest from "../datafetch/apiRequest";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ status, handleStatus }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [variant, setVariant] = useState("");
   const navigate = useNavigate();
+  const setStatus = handleStatus;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -24,22 +25,24 @@ const Login = () => {
       body: `username=${username}&password=${password}`,
     };
     const result = await apiRequest("http://localhost:5000/login", objReq);
-    const okresult = await result.json();
+    const resultObj = await result.json();
 
-    if (okresult.Code === "200") {
+    if (resultObj.Code === "200") {
       setVariant("success");
-      setSuccessMsg(okresult.Msg);
+      setSuccessMsg(resultObj.Msg);
       console.log(
-        `username(from backend): ${okresult.username}\n isAdmin(from backend): ${okresult.isAdmin}\n access token: ${okresult.accessToken}`
+        `username(from backend): ${resultObj.username}\n isAdmin(from backend): ${resultObj.isAdmin}\n access token: ${resultObj.accessToken}`
       );
-      localStorage.setItem("accessToken", okresult.accessToken);
-
+      localStorage.setItem("accessToken", resultObj.accessToken);
+      setTimeout(() => {
+        setStatus();
+      }, 500);
       setTimeout(() => {
         navigate("/home");
       }, 3000);
     } else {
       setVariant("danger");
-      setSuccessMsg(okresult.Msg);
+      setSuccessMsg(resultObj.Msg);
     }
   };
 
