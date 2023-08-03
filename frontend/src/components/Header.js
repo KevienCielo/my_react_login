@@ -2,29 +2,26 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ handleStatus }) => {
+const Header = () => {
   const navigate = useNavigate();
-  const setStatus = handleStatus;
+
   const handleHome = (event) => {
-    event.preventDefault();
     navigate("/home");
   };
   const handleBooks = (event) => {
-    event.preventDefault();
     navigate("/books");
   };
   const handleUsers = (event) => {
-    event.preventDefault();
     navigate("/users");
   };
   const handleLogout = (event) => {
-    event.preventDefault();
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("status");
     setTimeout(() => {
-      setStatus();
       navigate("/");
     }, 2000);
   };
+
   return (
     <header>
       <Navbar bg="dark" data-bs-theme="dark">

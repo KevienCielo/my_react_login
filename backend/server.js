@@ -148,7 +148,7 @@ app.post("/books/search", verify, (req, res) => {
   });
 
   if (book) {
-    "http://localhost:5000/books/search", res.json(book);
+    res.json(book);
   }
 });
 

@@ -7,13 +7,12 @@ import { useState } from "react";
 import apiRequest from "../datafetch/apiRequest";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ status, handleStatus }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [variant, setVariant] = useState("");
   const navigate = useNavigate();
-  const setStatus = handleStatus;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,12 +33,10 @@ const Login = ({ status, handleStatus }) => {
         `username(from backend): ${resultObj.username}\n isAdmin(from backend): ${resultObj.isAdmin}\n access token: ${resultObj.accessToken}`
       );
       localStorage.setItem("accessToken", resultObj.accessToken);
-      setTimeout(() => {
-        setStatus();
-      }, 500);
+      localStorage.setItem("status", "true");
       setTimeout(() => {
         navigate("/home");
-      }, 3000);
+      }, 2000);
     } else {
       setVariant("danger");
       setSuccessMsg(resultObj.Msg);
@@ -47,9 +44,9 @@ const Login = ({ status, handleStatus }) => {
   };
 
   return (
-    <article className="Login col">
+    <article className="Login co">
       <hr />
-      <section>
+      <section className="">
         <Form className=" w-25 m-auto" onSubmit={handleSubmit}>
           <legend className="text-center">Login</legend>
           <Row className="mb-3">
