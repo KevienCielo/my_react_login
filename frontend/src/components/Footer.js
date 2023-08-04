@@ -3,7 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 const Footer = () => {
   return (
     <footer>
-      <Navbar fixed="bottom" bg="dark" data-bs-theme="dark">
+      <Navbar className=" mt-5" fixed="bottom" bg="dark" data-bs-theme="dark">
         <Container>
           <Navbar.Brand className="m-auto text-muted" href="/">
             &copy; Copyright. Mark Cielo
