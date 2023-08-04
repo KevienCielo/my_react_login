@@ -33,6 +33,7 @@ const Authenticate = () => {
 const RootLayout = () => {
   let status = localStorage.getItem("status");
   const isLogged = status === "true" && true;
+
   return isLogged ? <DefaultLayout /> : <Authenticate />;
 };
 

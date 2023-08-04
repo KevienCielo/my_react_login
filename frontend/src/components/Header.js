@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" data-bs-theme="dark">
+      <Navbar fixed="top" bg="dark" data-bs-theme="dark">
         <Nav className="container">
           <Nav.Link onClick={handleHome}>Home</Nav.Link>
           <Nav.Link onClick={handleBooks}>Books</Nav.Link>

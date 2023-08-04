@@ -82,7 +82,7 @@ const LoginProfiles = [
 //function generating an access token
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "ThisMYsecretKey", {
-    expiresIn: "1000s",
+    expiresIn: "1d",
   });
 };
 
@@ -191,6 +191,31 @@ app.post("/users/search", verify, (req, res) => {
       Code: "400",
       Msg: `User not found. No record of user: "${req.body.BookName.toLowerCase()}"`,
     });
+  }
+});
+
+app.post("/users/add", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const isAdmin = req.body.isAdmin === "true" ? true : false;
+  const newRecord = {
+    id: LoginProfiles.length + 1,
+    username: username,
+    password: password,
+    isAdmin: isAdmin,
+  };
+
+  if (LoginProfiles.push(newRecord)) {
+    res.json({
+      Code: "200",
+      Msg: `User "${username}" was created and added to the list`,
+      id: newRecord.id,
+      username: newRecord.username,
+      password: newRecord.password,
+      isAdmin: newRecord.isAdmin,
+    });
+  } else {
+    res.json({ Code: "400", Msg: "Adding Failed" });
   }
 });
 

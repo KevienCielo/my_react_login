@@ -1,8 +1,8 @@
 import Row from "react-bootstrap/Row";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { useState } from "react";
 import apiRequest from "../datafetch/apiRequest";
 import { useNavigate } from "react-router-dom";
@@ -29,9 +29,6 @@ const Login = () => {
     if (resultObj.Code === "200") {
       setVariant("success");
       setSuccessMsg(resultObj.Msg);
-      console.log(
-        `username(from backend): ${resultObj.username}\n isAdmin(from backend): ${resultObj.isAdmin}\n access token: ${resultObj.accessToken}`
-      );
 
       localStorage.setItem("accessToken", resultObj.accessToken);
       localStorage.setItem("status", "true");
@@ -49,8 +46,8 @@ const Login = () => {
   return (
     <article className="Login co">
       <hr />
-      <section className="">
-        <Form className=" w-25 m-auto" onSubmit={handleLogin}>
+      <section>
+        <Form className="w-25 m-auto" onSubmit={handleLogin}>
           <legend className="text-center">Login</legend>
           <Row className="mb-3">
             <Alert key={variant} variant={variant}>

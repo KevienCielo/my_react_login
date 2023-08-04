@@ -2,6 +2,8 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { useState, useEffect } from "react";
 import apiRequest from "../datafetch/apiRequest";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +13,12 @@ const Admin = () => {
   const [username, setUsername] = useState("");
   const [searchMsg, setSearchMsg] = useState("");
   const [variant, setVariant] = useState("");
+
+  const [usernameAdd, setUsernameAdd] = useState("");
+  const [passwordAdd, setPasswordAdd] = useState("");
+  const [addMsg, setAddMsg] = useState("");
+  const [variantAdd, setVariantAdd] = useState("");
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const fetchUsers = async (objReq) => {
     const response = await apiRequest("http://localhost:5000/users", objReq);
@@ -68,8 +76,39 @@ const Admin = () => {
     }
   };
 
+  const handleAdd = async (event) => {
+    const token = localStorage.getItem("accessToken");
+    event.preventDefault();
+    const objReq = {
+      method: "POST",
+      headers: {
+        authorization: `token ${token}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `username=${usernameAdd}&password=${passwordAdd}&isAdmin=${isAdmin}`,
+    };
+    const result = await apiRequest("http://localhost:5000/users/add", objReq);
+    const resultObj = await result.json();
+    if (resultObj.Code === "200") {
+      const addedUser = {
+        id: resultObj.id,
+        username: resultObj.username,
+        password: resultObj.password,
+        isAdmin: resultObj.isAdmin,
+      };
+      const newUserList = [...users, addedUser];
+
+      setUsers(newUserList);
+      setVariantAdd("success");
+      setAddMsg(resultObj.Msg);
+    } else {
+      setVariantAdd("danger");
+      setAddMsg(resultObj.Msg);
+    }
+  };
+
   return (
-    <article className="Books col mt-5">
+    <article className="Books col mt-5 mb-5">
       <div className="w-25 mb-2 d-inline-block">
         <Form className="d-flex" onSubmit={handleSearch}>
           <Form.Control
@@ -120,6 +159,72 @@ const Admin = () => {
           )}
         </tbody>
       </Table>
+      <hr />
+      <section className="mt-5 bor">
+        <Form className="w-25" onSubmit={handleAdd}>
+          <legend className="text-start mb-0 d-inline-block">Add User</legend>
+          <Row className="mb-3">
+            <Alert
+              className="d-inline-block ms-4 mb-0"
+              key={variantAdd}
+              variant={variantAdd}
+            >
+              {addMsg}
+            </Alert>
+
+            <FloatingLabel
+              controlId="username"
+              label="username"
+              className="mb-3 p-1"
+            >
+              <Form.Control
+                type="text"
+                placeholder="username"
+                value={usernameAdd}
+                onChange={(event) => setUsernameAdd(event.target.value)}
+              />
+            </FloatingLabel>
+            <FloatingLabel
+              controlId="password"
+              label="password"
+              className="mb-3 p-1"
+            >
+              <Form.Control
+                type="text"
+                placeholder="password"
+                value={passwordAdd}
+                onChange={(event) => setPasswordAdd(event.target.value)}
+              />
+            </FloatingLabel>
+            {["radio"].map((type) => (
+              <div key={`inline-${type}`} className="mb-3">
+                <Form.Check
+                  inline
+                  label="Admin"
+                  name="group1"
+                  type={type}
+                  id={`inline-${type}-1`}
+                  value={true}
+                  onChange={(event) => setIsAdmin(event.target.value)}
+                />
+                <Form.Check
+                  inline
+                  label="Public"
+                  name="group1"
+                  type={type}
+                  id={`inline-${type}-2`}
+                  value={false}
+                  onChange={(event) => setIsAdmin(event.target.value)}
+                />
+              </div>
+            ))}
+          </Row>
+          <Button variant="primary" type="submit" value={`submit`}>
+            Add
+          </Button>
+        </Form>
+      </section>
+      <hr />
     </article>
   );
 };
@@ -148,6 +253,7 @@ const Authenticate = () => {
 const Users = () => {
   const admin = localStorage.getItem("admin");
   const isAdmin = admin === "true" && true;
+
   return isAdmin ? <Admin /> : <Authenticate />;
 };
 
