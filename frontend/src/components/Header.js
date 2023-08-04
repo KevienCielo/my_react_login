@@ -17,6 +17,7 @@ const Header = () => {
   const handleLogout = (event) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("status");
+    localStorage.removeItem("admin");
     setTimeout(() => {
       navigate("/");
     }, 2000);

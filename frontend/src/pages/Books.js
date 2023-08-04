@@ -1,17 +1,19 @@
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
 import { useState, useEffect } from "react";
 import apiRequest from "../datafetch/apiRequest";
 
 const Books = () => {
   const [books, setBooks] = useState("");
   const [bookName, setBookName] = useState("");
+  const [searchMsg, setSearchMsg] = useState("");
+  const [variant, setVariant] = useState("");
 
   const fetchBooks = async (objReq) => {
     const response = await apiRequest("http://localhost:5000/books", objReq);
     const booklist = await response.json();
-    console.log(booklist);
     setBooks(booklist);
   };
 
@@ -26,7 +28,7 @@ const Books = () => {
     fetchBooks(objReq);
   }, []);
 
-  const handleSubmit = async (event) => {
+  const handleSearch = async (event) => {
     event.preventDefault();
     const token = localStorage.getItem("accessToken");
     const objReq = {
@@ -41,23 +43,39 @@ const Books = () => {
       "http://localhost:5000/books/search",
       objReq
     );
-    const resultArr = [];
     const resultObj = await result.json();
-    resultArr.push(resultObj);
-    setBooks(resultArr);
+
+    if (resultObj.Code === "200") {
+      const resultArrObj = [
+        {
+          id: resultObj.id,
+          BookName: resultObj.BookName,
+          YearPublished: resultObj.YearPublished,
+          Author: resultObj.Author,
+          Category: resultObj.Category,
+          status: resultObj.status,
+        },
+      ];
+      setBooks(resultArrObj);
+      setSearchMsg(resultObj.Msg);
+      setVariant("success");
+    } else {
+      setSearchMsg(resultObj.Msg);
+      setVariant("danger");
+    }
   };
 
   return (
     <article className="Books col mt-5">
-      <div className="w-25 mb-2">
-        <Form className="d-flex" onSubmit={handleSubmit}>
+      <div className="w-25 mb-2 d-inline-block">
+        <Form className="d-flex" onSubmit={handleSearch}>
           <Form.Control
             type="search"
             placeholder="Name of Book"
             className="me-2 rounded-pill"
             aria-label="Search"
             value={bookName}
-            onChange={(e) => setBookName(e.target.value)}
+            onChange={(event) => setBookName(event.target.value)}
           />
           <Button
             className="rounded-pill"
@@ -68,6 +86,9 @@ const Books = () => {
           </Button>
         </Form>
       </div>
+      <Alert className="d-inline-block ms-4" key={variant} variant={variant}>
+        {searchMsg}
+      </Alert>
       <Table striped bordered hover variant="dark">
         <thead>
           <tr>
