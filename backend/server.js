@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -125,7 +126,7 @@ app.post("/login", (req, res) => {
   }
 });
 
-//endpoint for displaying all the books in an array of JSON Objects
+//endpoint for displaying all the books
 app.get("/books", verify, (req, res) => {
   res.json(Books);
 });
@@ -141,19 +142,56 @@ app.get("/books/:bookId", verify, (req, res) => {
   }
 });
 
-//endpoint for receiving a BookName of a book and returning its details
+//endpoint for receiving a name of a book and returning its details
 app.post("/books/search", verify, (req, res) => {
-  const book = Books.find((u) => {
-    return u.BookName === req.body.BookName;
+  const book = Books.find((book) => {
+    return book.BookName.toLowerCase() === req.body.BookName.toLowerCase();
   });
 
   if (book) {
-    res.json(book);
+    res.json({
+      Code: "200",
+      Msg: "Book Found",
+      id: book.id,
+      BookName: book.BookName,
+      YearPublished: book.YearPublished,
+      Author: book.Author,
+      Category: book.Category,
+      status: book.status,
+    });
+  } else {
+    res.json({
+      Code: "400",
+      Msg: `Book not found. No copy of book: "${req.body.BookName.toLowerCase()}"`,
+    });
   }
 });
 
+//endpoint for displaying all the users
 app.get("/users", verify, (req, res) => {
   res.json(LoginProfiles);
+});
+
+app.post("/users/search", verify, (req, res) => {
+  const user = LoginProfiles.find((user) => {
+    return user.username.toLowerCase() === req.body.username.toLowerCase();
+  });
+
+  if (user) {
+    res.json({
+      Code: "200",
+      Msg: "User Found",
+      id: user.id,
+      username: user.username,
+      password: user.password,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.json({
+      Code: "400",
+      Msg: `User not found. No record of user: "${req.body.BookName.toLowerCase()}"`,
+    });
+  }
 });
 
 app.listen(5000);

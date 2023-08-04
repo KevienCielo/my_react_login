@@ -14,7 +14,7 @@ const Login = () => {
   const [variant, setVariant] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     const objReq = {
       method: "POST",
@@ -32,8 +32,11 @@ const Login = () => {
       console.log(
         `username(from backend): ${resultObj.username}\n isAdmin(from backend): ${resultObj.isAdmin}\n access token: ${resultObj.accessToken}`
       );
+
       localStorage.setItem("accessToken", resultObj.accessToken);
       localStorage.setItem("status", "true");
+      localStorage.setItem("admin", resultObj.isAdmin);
+
       setTimeout(() => {
         navigate("/home");
       }, 2000);
@@ -47,7 +50,7 @@ const Login = () => {
     <article className="Login co">
       <hr />
       <section className="">
-        <Form className=" w-25 m-auto" onSubmit={handleSubmit}>
+        <Form className=" w-25 m-auto" onSubmit={handleLogin}>
           <legend className="text-center">Login</legend>
           <Row className="mb-3">
             <Alert key={variant} variant={variant}>

@@ -3,7 +3,8 @@ import Footer from "../components/Footer";
 import Main from "../components/Main";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-const DefLayout = () => {
+
+const DefaultLayout = () => {
   return (
     <div className="root-main">
       <Header></Header>
@@ -32,7 +33,7 @@ const Authenticate = () => {
 const RootLayout = () => {
   let status = localStorage.getItem("status");
   const isLogged = status === "true" && true;
-  return isLogged ? <DefLayout /> : <Authenticate />;
+  return isLogged ? <DefaultLayout /> : <Authenticate />;
 };
 
 export default RootLayout;
