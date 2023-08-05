@@ -1,4 +1,3 @@
-import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
@@ -7,9 +6,10 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { useState, useEffect } from "react";
 import apiRequest from "../datafetch/apiRequest";
 import { useNavigate } from "react-router-dom";
+import UserList from "./UserList";
 
 const Admin = () => {
-  const [users, setUsers] = useState("");
+  const [users, setUsers] = useState([]);
   const [username, setUsername] = useState("");
   const [searchMsg, setSearchMsg] = useState("");
   const [variant, setVariant] = useState("");
@@ -36,10 +36,6 @@ const Admin = () => {
     };
     fetchUsers(objReq);
   }, []);
-
-  const handleAdmin = (isAdmin) => {
-    return isAdmin ? "Yes" : "No";
-  };
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -107,6 +103,10 @@ const Admin = () => {
     }
   };
 
+  function onUpdateUser(updatedUser) {
+    setUsers(updatedUser);
+  }
+
   return (
     <article className="Books col mt-5 mb-5">
       <div className="w-25 mb-2 d-inline-block">
@@ -131,34 +131,7 @@ const Admin = () => {
       <Alert className="d-inline-block ms-4" key={variant} variant={variant}>
         {searchMsg}
       </Alert>
-      <Table striped bordered hover variant="dark">
-        <thead>
-          <tr>
-            <th>User Id</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>Administrator</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length ? (
-            users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.password}</td>
-                <td>{handleAdmin(user.isAdmin)}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={6} className="text-center">
-                list empty
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+      <UserList users={users} onUpdateUser={onUpdateUser}></UserList>
       <hr />
       <section className="mt-5 bor">
         <Form className="w-25" onSubmit={handleAdd}>

@@ -162,7 +162,7 @@ app.post("/books/search", verify, (req, res) => {
   } else {
     res.json({
       Code: "400",
-      Msg: `Book not found. No copy of book: "${req.body.BookName.toLowerCase()}"`,
+      Msg: `Book not found. No copy of book: "${req.body.BookName}"`,
     });
   }
 });
@@ -172,6 +172,7 @@ app.get("/users", verify, (req, res) => {
   res.json(LoginProfiles);
 });
 
+//endpoint for receiving a username of a user and returning its details
 app.post("/users/search", verify, (req, res) => {
   const user = LoginProfiles.find((user) => {
     return user.username.toLowerCase() === req.body.username.toLowerCase();
@@ -189,12 +190,13 @@ app.post("/users/search", verify, (req, res) => {
   } else {
     res.json({
       Code: "400",
-      Msg: `User not found. No record of user: "${req.body.BookName.toLowerCase()}"`,
+      Msg: `User not found. No record of user: "${req.body.username}"`,
     });
   }
 });
 
-app.post("/users/add", (req, res) => {
+//endpoint for adding a user
+app.post("/users/add", verify, (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const isAdmin = req.body.isAdmin === "true" ? true : false;
@@ -217,6 +219,36 @@ app.post("/users/add", (req, res) => {
   } else {
     res.json({ Code: "400", Msg: "Adding Failed" });
   }
+});
+
+//endpoint for updating a user
+app.patch("/users/update", verify, (req, res) => {
+  const id = Number(req.body.id);
+  const username = req.body.username;
+  const password = req.body.password;
+  const isAdmin = req.body.isAdmin === "true" ? true : false;
+
+  LoginProfiles.forEach((user) => {
+    if (user.id === id) {
+      user.username = username;
+      user.password = password;
+      user.isAdmin = isAdmin;
+    }
+  });
+  res.json(LoginProfiles);
+});
+
+//endpoint for deleting a user
+app.delete("/delete-user/:userId", (req, res) => {
+  LoginProfiles.forEach((user, index) => {
+    if (user.id.toString() === req.params.userId) {
+      LoginProfiles.splice(index, 1);
+    }
+  });
+  LoginProfiles.forEach((user, index) => {
+    user.id = index + 1;
+  });
+  res.json(LoginProfiles);
 });
 
 app.listen(5000);
